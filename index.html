@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Guide – Grand Ouest USA (Avril–Mai 2025)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-pMH188t0rSxkPgnrL7n+dH0mYlT9Ka9S6A5DJQ0P4vM=" crossorigin="anonymous">
+<style>
+  :root { --ink:#111; --muted:#6b6b6b; --bg:#fafafa; --acc:#0a84ff; }
+  html, body { margin:0; padding:0; background:#fff; color:var(--ink); font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,"Helvetica Neue",Arial,Inter,"Apple Color Emoji","Segoe UI Emoji",sans-serif; }
+  a { color:var(--acc); text-decoration: none; }
+  .container { max-width: 980px; margin: 0 auto; padding: 18px 16px 48px; }
+  header h1 { font-size: 34px; line-height: 1.2; margin: 8px 0 6px; }
+  header p.lead { font-size: 18px; color:var(--muted); margin: 0 0 14px; }
+  .map-wrap { background:var(--bg); padding: 10px; border:1px solid #e6e6e6; border-radius: 10px; }
+  #map { width: 100%; height: 420px; border-radius: 8px; }
+  .map-tools { display:flex; gap:16px; align-items:center; margin-top:10px; flex-wrap: wrap; }
+  .map-tools .qr { width:120px; height:120px; border: 1px solid #eee; border-radius: 6px; }
+  .grid { display:grid; grid-template-columns: 1.2fr 0.8fr; gap:24px; align-items:start; }
+  section.step { margin: 26px 0 36px; padding: 18px; border:1px solid #eee; border-radius: 10px; background:#fff; }
+  section.step h2 { margin: 0 0 6px; font-size: 22px; }
+  .meta { color:var(--muted); margin-bottom: 10px; }
+  .block { margin: 8px 0 10px; }
+  .poi-list li { margin-bottom:6px; }
+  figure.thumb { margin:0 0 10px; }
+  figure.thumb img { width: 100%; height: auto; border-radius:8px; display:block; }
+  figure.thumb figcaption { font-size:12px; color:#777; margin-top:6px; }
+  .photos { display:grid; grid-template-columns:1fr; gap:10px; }
+  @media (min-width: 720px) { .photos { grid-template-columns: 1fr 1fr; } }
+  footer { border-top:1px solid #eee; margin-top: 36px; padding-top: 16px; color:#777; font-size: 14px; }
+  @media print {
+    .map-tools img.qr { width:3cm; height:3cm; }
+    #map { height: 320px; }
+    .container { padding: 12px 14px; }
+    section.step { page-break-after: always; min-height: 26cm; }
+    header, footer { page-break-after: always; }
+    a::after { content: " (" attr(href) ")"; font-size: 10px; color:#999; }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Grand Ouest Américain — Le Guide</h1>
+      <p class="lead">De Los Angeles aux canyons de l’Utah, en passant par les séquoias géants, la Vallée de la Mort et Las Vegas.</p>
+      <div class="map-wrap">
+        <div id="map" aria-label="Carte interactive de la boucle"></div>
+        <div class="map-tools">
+          <div>
+            <strong>Itinéraire complet (Google Maps)</strong><br/>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=Los+Angeles,+CA&destination=Los+Angeles,+CA&travelmode=driving&waypoints=Grant+Grove+Visitor+Center,+Kings+Canyon+National+Park|Furnace+Creek+Visitor+Center,+Death+Valley|The+Venetian+Las+Vegas|Zion+National+Park+Visitor+Center|Page,+AZ|Grand+Canyon+Visitor+Center">https://www.google.com/maps/dir/?api=1&origin=Los+Angeles,+CA&destination=Los+Angeles,+CA&travelmode=driving&waypoints=Grant+Grove+Visitor+Center,+Kings+Canyon+National+Park|Furnace+Creek+Visitor+Center,+Death+Valley|The+Venetian+Las+Vegas|Zion+National+Park+Visitor+Center|Page,+AZ|Grand+Canyon+Visitor+Center</a>
+          </div>
+          <img class="qr" src="https://chart.googleapis.com/chart?cht=qr&chs=220x220&chl=https%3A//www.google.com/maps/dir/%3Fapi%3D1%26origin%3DLos%2BAngeles%2C%2BCA%26destination%3DLos%2BAngeles%2C%2BCA%26travelmode%3Ddriving%26waypoints%3DGrant%2BGrove%2BVisitor%2BCenter%2C%2BKings%2BCanyon%2BNational%2BPark%7CFurnace%2BCreek%2BVisitor%2BCenter%2C%2BDeath%2BValley%7CThe%2BVenetian%2BLas%2BVegas%7CZion%2BNational%2BPark%2BVisitor%2BCenter%7CPage%2C%2BAZ%7CGrand%2BCanyon%2BVisitor%2BCenter" alt="QR code vers l’itinéraire Google Maps"/>
+          <div style="flex:1 1 260px; color:#666">Astuce : scannez le QR code pour démarrer la navigation sur votre téléphone.</div>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <h2>Repères de conduite (durées approximatives)</h2>
+      <ul>
+        <li>Los Angeles → Grant Grove : 4 h 30–5 h</li>
+        <li>Grant Grove → Death Valley (Furnace Creek) : 6 h 30–7 h 30</li>
+        <li>Death Valley → Las Vegas : 2 h–2 h 30</li>
+        <li>Las Vegas → Zion (Springdale) : 2 h 30–3 h</li>
+        <li>Zion → Page : 2 h–2 h 15</li>
+        <li>Page → Grand Canyon (South Rim) : 2 h 45–3 h</li>
+        <li>Grand Canyon → Kingman : 3 h</li>
+        <li>Kingman → Los Angeles : 4 h 30–5 h</li>
+      </ul>
+    </section>
+
+    
+        <section class="step" id="s1">
+          <h2>Jour 1 · Los Angeles – Ville & plages</h2>
+          <div class="meta">Depuis : — · Vers : ≈ 4 h 30–5 h (Grant Grove)</div>
+          <div class="grid">
+            <div>
+              <div class="block"><p>Premiers pas sur la côte Pacifique : du dôme blanc du Griffith à la roue du Santa Monica Pier, Los Angeles mélange icônes hollywoodiennes et énergie créative.</p></div>
+              <div class="block"><h3>À ne pas manquer</h3><ul class="poi-list"><li><strong>Griffith Observatory & Hollywood Sign</strong> — Vue panoramique et coucher de soleil doré sur la ville.</li><li><strong>Arts District & Grand Central Market</strong> — Street‑art, cafés et stands de cuisine du monde.</li><li><strong>Santa Monica & Venice</strong> — Promenade en bord d’océan, ambiance décontractée.</li></ul></div>
+              <div class="block"><h3>Bonus sur le trajet</h3><ul class="poi-list"><li><strong>Mulholland Drive</strong> — Belvédères sur les collines (arrêts signalés).</li><li><strong>Runyon Canyon</strong> — Marche courte et vue sur Downtown & Hollywood Sign.</li><li><strong>Venice Canals</strong> — Quartier pittoresque, parfait pour une balade tranquille.</li></ul></div>
+              <div class="block"><strong>Où passer la nuit</strong> : Santa Monica / West Hollywood</div>
+              <div class="block"><h3>À prévoir</h3><ul class="poi-list"><li>Veste légère le soir sur l’océan</li><li>Appli ParkMobile pour certains parkings</li></ul></div>
+              <div class="block"><h3>Carte de l’étape</h3><p><a href="https://www.google.com/maps/search/?api=1&query=Griffith+Observatory">Ouvrir dans Google Maps</a></p></div>
+            </div>
+            <div class="photos">
+            <figure class="thumb">
+              <img data-unsplash="https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=1200&h=750"
+                   data-fallback="https://commons.wikimedia.org/wiki/Special:FilePath/Santa_Monica_Pier_at_dusk.jpg?width=980"
+                   alt="Santa Monica Pier">
+              <figcaption>Santa Monica Pier — Unsplash (licence libre) · bascule automatique sur Commons en cas de blocage</figcaption>
+            </figure>
+            
+            <figure class="thumb">
+              <img data-unsplash="https://images.unsplash.com/photo-1468476396571-4d6f2a427ee7?auto=format&fit=crop&w=1200&h=750"
+                   data-fallback="https://commons.wikimedia.org/wiki/Special:FilePath/Griffith_Observatory%2C_March_2019.jpg?width=980"
+                   alt="Griffith Observatory">
+              <figcaption>Griffith Observatory — Unsplash (licence libre) · bascule automatique sur Commons en cas de blocage</figcaption>
+            </figure>
+            </div>
+          </div>
+        </section>
+        
+        <section class="step" id="s2">
+          <h2>Jour 2 · Grant Grove (Sequoia/Kings Canyon)</h2>
+          <div class="meta">Depuis : ≈ 4 h 30–5 h (Los Angeles) · Vers : ≈ 6 h 30–7 h 30 (Death Valley)</div>
+          <div class="grid">
+            <div>
+              <div class="block"><p>Ici, la forêt prend des allures de cathédrale. Autour du General Grant, géant placide de plus de 1 500 ans, la marche se fait douce sur un tapis d’aiguilles et de lumière tamisée.</p></div>
+              <div class="block"><h3>À ne pas manquer</h3><ul class="poi-list"><li><strong>General Grant Tree</strong> — Deuxième plus grand séquoia du monde ; boucle courte et plate.</li><li><strong>Grant Grove Visitor Center</strong> — Cartes, conseils de rangers et expositions.</li></ul></div>
+              <div class="block"><h3>Bonus sur le trajet</h3><ul class="poi-list"><li><strong>Panoramic Point</strong> — Vue sur les montagnes de Kings Canyon (selon ouverture de la route).</li><li><strong>Bravo Farms (Traver)</strong> — Pause conviviale sur la CA‑99 : snacks et souvenirs.</li><li><strong>Lac Kaweah</strong> — Beaux paysages en montant depuis Visalia.</li></ul></div>
+              <div class="block"><strong>Où passer la nuit</strong> : Grant Grove Village (John Muir Lodge / Cabins)</div>
+              <div class="block"><h3>À prévoir</h3><ul class="poi-list"><li>Chaussures fermées, veste légère (altitude)</li><li>Faire le plein à Visalia/Fresno</li></ul></div>
+              <div class="block"><h3>Carte de l’étape</h3><p><a href="https://www.google.com/maps/search/?api=1&query=Grant+Grove+Visitor+Center">Ouvrir dans Google Maps</a></p></div>
+            </div>
+            <div class="photos">
+            <figure class="thumb">
+              <img data-unsplash="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&h=750"
+                   data-fallback="https://commons.wikimedia.org/wiki/Special:FilePath/General_Grant_Tree%2C_Kings_Canyon_National_Park.jpg?width=980"
+                   alt="General Grant Tree">
+              <figcaption>General Grant Tree — Unsplash (licence libre) · bascule automatique sur Commons en cas de blocage</figcaption>
+            </figure>
+            
+            <figure class="thumb">
+              <img data-unsplash="https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?auto=format&fit=crop&w=1200&h=750"
+                   data-fallback="https://commons.wikimedia.org/wiki/Special:FilePath/Sequoia_grant_forest.jpg?width=980"
+                   alt="Grant Grove">
+              <figcaption>Grant Grove — Unsplash (licence libre) · bascule automatique sur Commons en cas de blocage</figcaption>
+            </figure>
+            </div>
+          </div>
+        </section>
+        
+        <section class="step" id="s3">
+          <h2>Jour 3 · Death Valley – Arrivée (Furnace Creek)</h2>
+          <div class="meta">Depuis : ≈ 6 h 30–7 h 30 (Grant Grove) · Vers : — (journée sur place)</div>
+          <div class="grid">
+            <div>
+              <div class="block"><p>Bienvenue dans un autre monde : immensité minérale, lignes à l’infini et silence vibrant. Une fin d’après‑midi aux dunes de Mesquite suffit pour comprendre la magie du lieu.</p></div>
+              <div class="block"><h3>À ne pas manquer</h3><ul class="poi-list"><li><strong>Mesquite Flat Sand Dunes</strong> — Ombres superbes au coucher ; accès facile depuis la route.</li><li><strong>Furnace Creek Visitor Center</strong> — Infos météo/conditions et expo sur le parc.</li></ul></div>
+              <div class="block"><h3>Bonus sur le trajet</h3><ul class="poi-list"><li><strong>Zzyzx Road (Soda Lake)</strong> — Curiosité sur l’I‑15, paysage de playa.</li><li><strong>Mojave Air & Space Port</strong> — Arrêt rapide pour apercevoir des appareils au repos.</li><li><strong>Baker Thermometer</strong> — Thermomètre géant : photo fun sur la route.</li></ul></div>
+              <div class="block"><strong>Où passer la nuit</strong> : Furnace Creek ou Stovepipe Wells</div>
+              <div class="block"><h3>À prévoir</h3><ul class="poi-list"><li>3–4 L d’eau/personne pour le lendemain</li><li>Crème solaire, chapeau, lunettes</li></ul></div>
+              <div class="block"><h3>Carte de l’étape</h3><p><a href="https://www.google.com/maps/search/?api=1&query=Furnace+Creek+Visitor+Center">Ouvrir dans Google Maps</a></p></div>
+            </div>
+            <div class="photos">
+            <figure class="thumb">
+              <img data-unsplash="https://images.unsplash.com/photo-1542044801-7aaf0c1e7e17?auto=format&fit=crop&w=1200&h=750"
+                   data-fallback="https://commons.wikimedia.org/wiki/Special:FilePath/Mesquite_Flat_Sand_Dunes_in_Death_Valley.jpg?width=980"
+                   alt="Mesquite Dunes">
+              <figcaption>Mesquite Dunes — Unsplash (licence libre) · bascule automatique sur Commons en cas de blocage</figcaption>
+            </figure>
+            </div>
+          </div>
+        </section>
+        
+        <section class="step" id="s4">
+          <h2>Jour 4 · Death Valley – Panoramas & points extrêmes</h2>
+          <div class="meta">Depuis : — · Vers : ≈ 2 h–2 h 30 (Las Vegas)</div>
+          <div class="grid">
+            <div>
+              <div class="block"><p>Lever sur Dante’s View, badlands dorés de Zabriskie, croûtes de sel à Badwater : la Vallée de la Mort se savoure tôt. L’après‑midi, Artists Drive dévoile sa palette pastel presque irréelle.</p></div>
+              <div class="block"><h3>À ne pas manquer</h3><ul class="poi-list"><li><strong>Dante’s View</strong> — Vue plongeante sur la vallée – magique au lever.</li><li><strong>Zabriskie Point</strong> — Badlands sculptés : lumière idéale tôt/soir.</li><li><strong>Badwater Basin (−86 m)</strong> — Point le plus bas d’Amérique du Nord ; plaques de sel.</li><li><strong>Artists Drive/Palette</strong> — Boucle scénique – couleurs minérales étonnantes.</li></ul></div>
+              <div class="block"><h3>Bonus sur le trajet</h3><ul class="poi-list"><li><strong>Golden Canyon</strong> — Petite randonnée dorée (accès proche de Zabriskie).</li><li><strong>Devils Golf Course</strong> — Reliefs de sel fracturé – arrêt photo rapide.</li><li><strong>Salt Creek Boardwalk</strong> — Selon saison, pupfish endémiques visibles.</li></ul></div>
+              <div class="block"><strong>Où passer la nuit</strong> : Furnace Creek / Stovepipe Wells</div>
+              <div class="block"><h3>À prévoir</h3><ul class="poi-list"><li>Éviter 12–16 h (chaleur sèche)</li><li>Chaussures fermées (sel/roche)</li></ul></div>
+              <div class="block"><h3>Carte de l’étape</h3><p><a href="https://www.google.com/maps/search/?api=1&query=Dante%27s+View+Death+Valley">Ouvrir dans Google Maps</a></p></div>
+            </div>
+            <div class="photos">
+            <figure class="thumb">
+              <img data-unsplash="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=1200&h=750"
+                   data-fallback="https://commons.wikimedia.org/wiki/Special:FilePath/Zabriskie_Point_in_Death_Valley.jpg?width=980"
+                   alt="Zabriskie Point">
+              <figcaption>Zabriskie Point — Unsplash (licence libre) · bascule automatique sur Commons en cas de blocage</figcaption>
+            </figure>
+            
+            <figure class="thumb">
+              <img data-unsplash="https://images.unsplash.com/photo-1542051841857-5fae932e6f45?auto=format&fit=crop&w=1200&h=750"
+                   data-fallback="https://commons.wikimedia.org/wiki/Special:FilePath/Badwater_Basin_Saltflats.jpg?width=980"
+                   alt="Badwater Basin">
+              <figcaption>Badwater Basin — Unsplash (licence libre) · bascule automatique sur Commons en cas de blocage</figcaption>
+            </figure>
+            </div>
+          </div>
+        </section>
+        
+        <section class="step" id="s5">
+          <h2>Jour 5 · Las Vegas – Soirée Sphere</h2>
+          <div class="meta">Depuis : ≈ 2 h–2 h 30 (Death Valley) · Vers : — (jour off)</div>
+          <div class="grid">
+            <div>
+              <div class="block"><p>Au bout du désert, une oasis de néons. Le Strip s’illumine, la Sphere s’anime : une parenthèse spectaculaire.</p></div>
+              <div class="block"><h3>À ne pas manquer</h3><ul class="poi-list"><li><strong>Strip à pied</strong> — Ambiance nocturne et hôtels thématiques.</li><li><strong>Sphere – extérieur</strong> — La « planète » LED change au fil de la soirée.</li><li><strong>Show immersif (option)</strong> — Réserver à l’avance selon programmation.</li></ul></div>
+              <div class="block"><h3>Bonus sur le trajet</h3><ul class="poi-list"><li><strong>Neon Museum</strong> — Enseignes historiques, idéal en fin de journée.</li><li><strong>Bellagio Fountains</strong> — Grand spectacle d’eau et de musique – gratuit.</li></ul></div>
+              <div class="block"><strong>Où passer la nuit</strong> : Strip proche du Venetian / Sphere</div>
+              <div class="block"><h3>À prévoir</h3><ul class="poi-list"><li>Billets Sphere à réserver</li><li>Chaussures confort</li></ul></div>
+              <div class="block"><h3>Carte de l’étape</h3><p><a href="https://www.google.com/maps/search/?api=1&query=The+Venetian+Las+Vegas">Ouvrir dans Google Maps</a></p></div>
+            </div>
+            <div class="photos">
+            <figure class="thumb">
+              <img data-unsplash="https://images.unsplash.com/photo-1519167758481-83f550bb49b0?auto=format&fit=crop&w=1200&h=750"
+                   data-fallback="https://commons.wikimedia.org/wiki/Special:FilePath/Las_Vegas_Strip.jpg?width=980"
+                   alt="Las Vegas Strip">
+              <figcaption>Las Vegas Strip — Unsplash (licence libre) · bascule automatique sur Commons en cas de blocage</figcaption>
+            </figure>
+            
+            <figure class="thumb">
+              <img data-unsplash="https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&h=750"
+                   data-fallback="https://commons.wikimedia.org/wiki/Special:FilePath/Neon_Museum%2C_Las_Vegas.jpg?width=980"
+                   alt="Neon Museum">
+              <figcaption>Neon Museum — Unsplash (licence libre) · bascule automatique sur Commons en cas de blocage</figcaption>
+            </figure>
+            </div>
+          </div>
+        </section>
+        
+        <section class="step" id="s6">
+          <h2>Jour 6 · Las Vegas – Jour off (repos)</h2>
+          <div class="meta">Depuis : — · Vers : ≈ 2 h 30–3 h (Zion)</div>
+          <div class="grid">
+            <div>
+              <div class="block"><p>On ralentit : piscine, brunch, Neon Museum ou boutiques… Recharger les batteries avant les canyons.</p></div>
+              <div class="block"><h3>À ne pas manquer</h3><ul class="poi-list"><li><strong>Piscine & brunch</strong> — Détente bienvenue.</li><li><strong>Show le soir (option)</strong> — Cirque du Soleil, magie, concerts.</li></ul></div>
+              <div class="block"><h3>Bonus sur le trajet</h3><ul class="poi-list"><li><strong>Red Rock Canyon</strong> — Boucle scénique de 13 miles : roches rouges et points de vue.</li><li><strong>Seven Magic Mountains</strong> — Installation colorée en plein désert – pause photo facile.</li></ul></div>
+              <div class="block"><strong>Où passer la nuit</strong> : Strip / Downtown</div>
+              <div class="block"><h3>À prévoir</h3><ul class="poi-list"><li>Hydratation (air sec)</li><li>Réserver restaurants appréciés</li></ul></div>
+              <div class="block"><h3>Carte de l’étape</h3><p><a href="https://www.google.com/maps/search/?api=1&query=Las+Vegas+Strip">Ouvrir dans Google Maps</a></p></div>
+            </div>
+            <div class="photos">
+            <figure class="thumb">
+              <img data-unsplash="https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&h=750"
+                   data-fallback="https://commons.wikimedia.org/wiki/Special:FilePath/Neon_Museum%2C_Las_Vegas.jpg?width=980"
+                   alt="Neon Museum">
+              <figcaption>Neon Museum — Unsplash (licence libre) · bascule automatique sur Commons en cas de blocage</figcaption>
+            </figure>
+            </div>
+          </div>
+        </section>
+        
+        <section class="step" id="s7">
+          <h2>Jour 7 · Zion – Arrivée & balades faciles</h2>
+          <div class="meta">Depuis : ≈ 2 h 30–3 h (Las Vegas) · Vers : — (journée Zion)</div>
+          <div class="grid">
+            <div>
+              <div class="block"><p>La rivière Virgin file entre de hautes falaises. Pa’rus et Emerald Pools offrent une mise en jambe douce.</p></div>
+              <div class="block"><h3>À ne pas manquer</h3><ul class="poi-list"><li><strong>Pa’rus Trail</strong> — Plat, accessible, parfait pour l’ambiance du canyon.</li><li><strong>Emerald Pools</strong> — Petites cascades et bassins (selon débit).</li></ul></div>
+              <div class="block"><h3>Bonus sur le trajet</h3><ul class="poi-list"><li><strong>Valley of Fire</strong> — Option sur la route : couleurs flamboyantes et arches – +1 h de détour.</li><li><strong>Mesquite (NV)</strong> — Pause déjeuner facile avant l’Utah.</li></ul></div>
+              <div class="block"><strong>Où passer la nuit</strong> : Springdale (à pied des navettes)</div>
+              <div class="block"><h3>À prévoir</h3><ul class="poi-list"><li>Navette obligatoire (mars→nov.)</li><li>Se garer tôt à Springdale</li></ul></div>
+              <div class="block"><h3>Carte de l’étape</h3><p><a href="https://www.google.com/maps/search/?api=1&query=Zion+National+Park+Visitor+Center">Ouvrir dans Google Maps</a></p></div>
+            </div>
+            <div class="photos">
+            <figure class="thumb">
+              <img data-unsplash="https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1200&h=750"
+                   data-fallback="https://commons.wikimedia.org/wiki/Special:FilePath/Zion_National_Park_%28Utah%2C_USA%29.jpg?width=980"
+                   alt="Zion Canyon">
+              <figcaption>Zion Canyon — Unsplash (licence libre) · bascule automatique sur Commons en cas de blocage</figcaption>
+            </figure>
+            </div>
+          </div>
+        </section>
+        
+        <section class="step" id="s8">
+          <h2>Jour 8 · Zion – Randonnées emblématiques</h2>
+          <div class="meta">Depuis : — · Vers : ≈ 2 h–2 h 15 (Page)</div>
+          <div class="grid">
+            <div>
+              <div class="block"><p>Angels Landing (ou Scout Lookout) pour le vertige maîtrisé ; The Narrows pour marcher au fil de l’eau.</p></div>
+              <div class="block"><h3>À ne pas manquer</h3><ul class="poi-list"><li><strong>Angels Landing (permis)</strong> — Loterie ; sinon montée jusqu’à Scout Lookout, déjà magnifique.</li><li><strong>The Narrows (si débit OK)</strong> — Équipement néoprène et bâton conseillés au printemps.</li></ul></div>
+              <div class="block"><h3>Bonus sur le trajet</h3><ul class="poi-list"><li><strong>Watchman Trail</strong> — Panorama sur Springdale – superbe au lever.</li><li><strong>Canyon Overlook</strong> — Court sentier avec vue spectaculaire sur la vallée.</li></ul></div>
+              <div class="block"><strong>Où passer la nuit</strong> : Springdale</div>
+              <div class="block"><h3>À prévoir</h3><ul class="poi-list"><li>Bâton & néoprène pour The Narrows</li><li>Partir tôt pour éviter l’affluence</li></ul></div>
+              <div class="block"><h3>Carte de l’étape</h3><p><a href="https://www.google.com/maps/search/?api=1&query=Angels+Landing+trailhead">Ouvrir dans Google Maps</a></p></div>
+            </div>
+            <div class="photos">
+            <figure class="thumb">
+              <img data-unsplash="https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&h=750"
+                   data-fallback="https://commons.wikimedia.org/wiki/Special:FilePath/Angels_Landing_from_West_Rim_Trail.jpg?width=980"
+                   alt="Angels Landing">
+              <figcaption>Angels Landing — Unsplash (licence libre) · bascule automatique sur Commons en cas de blocage</figcaption>
+            </figure>
+            
+            <figure class="thumb">
+              <img data-unsplash="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&h=750"
+                   data-fallback="https://commons.wikimedia.org/wiki/Special:FilePath/The_Narrows_-_Zion_National_Park.jpg?width=980"
+                   alt="The Narrows">
+              <figcaption>The Narrows — Unsplash (licence libre) · bascule automatique sur Commons en cas de blocage</figcaption>
+            </figure>
+            </div>
+          </div>
+        </section>
+        
+        <section class="step" id="s9">
+          <h2>Jour 9 · Page – Horseshoe Bend</h2>
+          <div class="meta">Depuis : ≈ 2 h–2 h 15 (Zion) · Vers : — (journée à Page)</div>
+          <div class="grid">
+            <div>
+              <div class="block"><p>Le Colorado dessine ici une boucle parfaite. L’instant est grandiose, surtout à l’or doré de fin de journée.</p></div>
+              <div class="block"><h3>À ne pas manquer</h3><ul class="poi-list"><li><strong>Horseshoe Bend</strong> — 15–20 min de marche depuis le parking ; barrière sécurisée.</li><li><strong>Wahweap Overlook (Lake Powell)</strong> — Point de vue rapide sur le lac et les marinas.</li></ul></div>
+              <div class="block"><h3>Bonus sur le trajet</h3><ul class="poi-list"><li><strong>Toadstool Hoodoos</strong> — Mini‑rando (1 h A/R) au milieu de cheminées de fée.</li><li><strong>Big Water Visitor Center</strong> — Géologie locale, conseils routes/points de vue.</li></ul></div>
+              <div class="block"><strong>Où passer la nuit</strong> : Page (centre‑ville)</div>
+              <div class="block"><h3>À prévoir</h3><ul class="poi-list"><li>Chapeau/soleil + eau</li><li>Chaussures fermées (sable/cailloux)</li></ul></div>
+              <div class="block"><h3>Carte de l’étape</h3><p><a href="https://www.google.com/maps/search/?api=1&query=Horseshoe+Bend+Parking+Lot">Ouvrir dans Google Maps</a></p></div>
+            </div>
+            <div class="photos">
+            <figure class="thumb">
+              <img data-unsplash="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&h=750"
+                   data-fallback="https://commons.wikimedia.org/wiki/Special:FilePath/Horseshoe_Bend_2009.jpg?width=980"
+                   alt="Horseshoe Bend">
+              <figcaption>Horseshoe Bend — Unsplash (licence libre) · bascule automatique sur Commons en cas de blocage</figcaption>
+            </figure>
+            </div>
+          </div>
+        </section>
+        
+        <section class="step" id="s10">
+          <h2>Jour 10 · Page – Antelope Canyon (tour guidé)</h2>
+          <div class="meta">Depuis : — · Vers : ≈ 2 h 45–3 h (Grand Canyon)</div>
+          <div class="grid">
+            <div>
+              <div class="block"><p>Dans les méandres de grès, la lumière devient matière. Upper pour les faisceaux ; Lower pour les passages ludiques.</p></div>
+              <div class="block"><h3>À ne pas manquer</h3><ul class="poi-list"><li><strong>Lower Antelope Canyon</strong> — Escaliers et passages étroits ; très photogénique.</li><li><strong>Upper Antelope Canyon</strong> — Faisceaux lumineux surtout de fin printemps à été.</li></ul></div>
+              <div class="block"><h3>Bonus sur le trajet</h3><ul class="poi-list"><li><strong>Glen Canyon Dam Overlook</strong> — Belvédère sur le barrage et le Colorado.</li><li><strong>Lone Rock Beach</strong> — Grande plage avec vue, idéale par beau temps.</li></ul></div>
+              <div class="block"><strong>Où passer la nuit</strong> : Page (2e nuit)</div>
+              <div class="block"><h3>À prévoir</h3><ul class="poi-list"><li>Billets Antelope obligatoires (guide Navajo)</li><li>Sacs petits uniquement (souvent)</li></ul></div>
+              <div class="block"><h3>Carte de l’étape</h3><p><a href="https://www.google.com/maps/search/?api=1&query=Lower+Antelope+Canyon+Entrance">Ouvrir dans Google Maps</a></p></div>
+            </div>
+            <div class="photos">
+            <figure class="thumb">
+              <img data-unsplash="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=1200&h=750"
+                   data-fallback="https://commons.wikimedia.org/wiki/Special:FilePath/Lower_Antelope_Canyon_2019.jpg?width=980"
+                   alt="Antelope Canyon">
+              <figcaption>Antelope Canyon — Unsplash (licence libre) · bascule automatique sur Commons en cas de blocage</figcaption>
+            </figure>
+            </div>
+          </div>
+        </section>
+        
+        <section class="step" id="s11">
+          <h2>Jour 11 · Grand Canyon (South Rim)</h2>
+          <div class="meta">Depuis : ≈ 2 h 45–3 h (Page) · Vers : ≈ 3 h (Kingman)</div>
+          <div class="grid">
+            <div>
+              <div class="block"><p>Devant soi, un monde à étages. Desert View, Yavapai, Hopi : on suit la crête pour saisir les nuances du canyon.</p></div>
+              <div class="block"><h3>À ne pas manquer</h3><ul class="poi-list"><li><strong>Desert View Watchtower</strong> — Superbe introduction en arrivant par l’est.</li><li><strong>Yavapai / Hopi Point</strong> — Coucher de soleil et géologie à portée de vue.</li></ul></div>
+              <div class="block"><h3>Bonus sur le trajet</h3><ul class="poi-list"><li><strong>Shoshone Point</strong> — Belvédère plus tranquille (courte marche).</li><li><strong>Trail of Time</strong> — Parcours didactique le long du rim, idéal en fin de journée.</li></ul></div>
+              <div class="block"><strong>Où passer la nuit</strong> : Dans le parc (Yavapai/Maswik) ou Tusayan</div>
+              <div class="block"><h3>À prévoir</h3><ul class="poi-list"><li>Couches chaudes à l’aube (~2100 m)</li><li>Navettes (Hermit/Kaibab) utiles en saison</li></ul></div>
+              <div class="block"><h3>Carte de l’étape</h3><p><a href="https://www.google.com/maps/search/?api=1&query=Grand+Canyon+Visitor+Center">Ouvrir dans Google Maps</a></p></div>
+            </div>
+            <div class="photos">
+            <figure class="thumb">
+              <img data-unsplash="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&h=750"
+                   data-fallback="https://commons.wikimedia.org/wiki/Special:FilePath/Hopi_Point_sunset.jpg?width=980"
+                   alt="Grand Canyon">
+              <figcaption>Grand Canyon — Unsplash (licence libre) · bascule automatique sur Commons en cas de blocage</figcaption>
+            </figure>
+            
+            <figure class="thumb">
+              <img data-unsplash="https://images.unsplash.com/photo-1533670802258-6adf0aa67e12?auto=format&fit=crop&w=1200&h=750"
+                   data-fallback="https://commons.wikimedia.org/wiki/Special:FilePath/Desert_View_Watchtower_2013.jpg?width=980"
+                   alt="Desert View Tower">
+              <figcaption>Desert View Tower — Unsplash (licence libre) · bascule automatique sur Commons en cas de blocage</figcaption>
+            </figure>
+            </div>
+          </div>
+        </section>
+        
+        <section class="step" id="s12">
+          <h2>Jour 12 · Kingman – Route 66</h2>
+          <div class="meta">Depuis : ≈ 3 h (Grand Canyon) · Vers : ≈ 4 h 30–5 h (Los Angeles)</div>
+          <div class="grid">
+            <div>
+              <div class="block"><p>Vieilles enseignes, pompes vintage, diners à banquettes rouges : un parfum d’Amérique classique avant la côte.</p></div>
+              <div class="block"><h3>À ne pas manquer</h3><ul class="poi-list"><li><strong>Route 66 Museum</strong> — Expo rapide et bien faite sur la « Mother Road ».</li><li><strong>Centre historique</strong> — Néons et façades rétro au crépuscule.</li></ul></div>
+              <div class="block"><h3>Bonus sur le trajet</h3><ul class="poi-list"><li><strong>Seligman</strong> — Village mythique de la 66 – photos & diners à l’ancienne.</li><li><strong>Hackberry General Store</strong> — Arrêt photo incontournable sur la 66.</li><li><strong>Oatman</strong> — Ancien village minier avec ânes en liberté (détour).</li></ul></div>
+              <div class="block"><strong>Où passer la nuit</strong> : Kingman (centre historique)</div>
+              <div class="block"><h3>À prévoir</h3><ul class="poi-list"><li>Carburant avant la longue liaison</li><li>Multiples arrêts photo possibles</li></ul></div>
+              <div class="block"><h3>Carte de l’étape</h3><p><a href="https://www.google.com/maps/search/?api=1&query=Kingman+AZ+Route+66+Museum">Ouvrir dans Google Maps</a></p></div>
+            </div>
+            <div class="photos">
+            <figure class="thumb">
+              <img data-unsplash="https://images.unsplash.com/photo-1500989145603-8e7ef71d639e?auto=format&fit=crop&w=1200&h=750"
+                   data-fallback="https://commons.wikimedia.org/wiki/Special:FilePath/Seligman_Route_66.jpg?width=980"
+                   alt="Seligman Route 66">
+              <figcaption>Seligman Route 66 — Unsplash (licence libre) · bascule automatique sur Commons en cas de blocage</figcaption>
+            </figure>
+            </div>
+          </div>
+        </section>
+        
+        <section class="step" id="s13">
+          <h2>Jour 13 · Los Angeles – Retour</h2>
+          <div class="meta">Depuis : ≈ 4 h 30–5 h (Kingman) · Vers : —</div>
+          <div class="grid">
+            <div>
+              <div class="block"><p>Dernière baignade, dernier panorama depuis le Getty Center ou balade à Abbot Kinney. L’océan en ligne de mire.</p></div>
+              <div class="block"><h3>À ne pas manquer</h3><ul class="poi-list"><li><strong>Plages (Santa Monica / Manhattan)</strong> — Ambiance pacifique et coucher de soleil final.</li><li><strong>Getty Center</strong> — Architecture & jardins suspendus au‑dessus de la ville.</li></ul></div>
+              <div class="block"><h3>Bonus sur le trajet</h3><ul class="poi-list"><li><strong>Elmer’s Bottle Tree Ranch</strong> — Installation folk‑art sur l’historique Route 66 (via Victorville).</li><li><strong>Calico Ghost Town</strong> — Ville fantôme réhabilitée (détour après Barstow).</li></ul></div>
+              <div class="block"><strong>Où passer la nuit</strong> : Dernière nuit à LA (LAX ou Santa Monica)</div>
+              <div class="block"><h3>À prévoir</h3><ul class="poi-list"><li>Restitution du véhicule en temps</li><li>Vérifier trafic I‑15/I‑10</li></ul></div>
+              <div class="block"><h3>Carte de l’étape</h3><p><a href="https://www.google.com/maps/search/?api=1&query=Santa+Monica+Pier">Ouvrir dans Google Maps</a></p></div>
+            </div>
+            <div class="photos">
+            <figure class="thumb">
+              <img data-unsplash="https://images.unsplash.com/photo-1509057199576-632a47484ece?auto=format&fit=crop&w=1200&h=750"
+                   data-fallback="https://commons.wikimedia.org/wiki/Special:FilePath/Manhattan_Beach_pier.jpg?width=980"
+                   alt="Manhattan Beach Pier">
+              <figcaption>Manhattan Beach Pier — Unsplash (licence libre) · bascule automatique sur Commons en cas de blocage</figcaption>
+            </figure>
+            </div>
+          </div>
+        </section>
+        
+
+    <footer>
+      <div>Cartographie : <a href="https://www.openstreetmap.org/">OpenStreetMap</a> via <a href="https://leafletjs.com/">Leaflet</a>. Photos : Unsplash (licence libre) avec repli automatique sur Wikimedia Commons en cas de blocage.</div>
+      <div>Les durées de conduite sont indicatives ; vérifiez l’état des routes et les horaires des navettes dans les parcs.</div>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-vuT0tH5QOnx1Z9D9L2S/X1pWCP3K+3vHyCuHaz5CwP8=" crossorigin="anonymous"></script>
+  <script>
+    // Initialize Leaflet map (HTTPS tiles for GitHub Pages)
+    const coords = [(34.0522, -118.2437), (36.7478, -118.9721), (36.4634, -116.8657), (36.1699, -115.1398), (37.2, -112.987), (36.9147, -111.4558), (36.0494, -112.1097), (35.1894, -114.053), (34.0522, -118.2437)];
+    const names = ["Los Angeles","Grant Grove","Death Valley (Furnace Creek)","Las Vegas","Zion (Springdale)","Page","Grand Canyon (South Rim)","Kingman","Los Angeles"];
+    const map = L.map('map');
+    L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {maxZoom: 18, attribution: '&copy; OpenStreetMap contributors'}).addTo(map);
+    const latlngs = [];
+    coords.forEach((c, i) => { L.marker(c).addTo(map).bindPopup((i+1)+". "+names[i]); latlngs.push(c); });
+    const line = L.polyline(latlngs, {color:'#0a84ff', weight:4, opacity:0.8}).addTo(map);
+    map.fitBounds(line.getBounds(), {padding:[20,20]});
+
+    // Swap data-unsplash to src; fallback to Commons if blocked/404
+    document.querySelectorAll('img[data-unsplash]').forEach(img => {
+      const u = img.getAttribute('data-unsplash');
+      const fb = img.getAttribute('data-fallback');
+      img.onerror = () => { if (img.src !== fb) img.src = fb; };
+      img.src = u;
+    });
+  </script>
+</body>
+</html>
